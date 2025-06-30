@@ -15,10 +15,20 @@ cp .env.example .env
 
 ## Usage
 
-Run the login script from the command line:
+Run the CLI with the `login` command to authenticate:
 
 ```bash
-python scripts/instagram_login.py
+python scripts/instagram_cli.py login
 ```
 
 If authentication is successful, you will see a confirmation message.
+
+### Export followers list
+
+Fetch the followers of a public account and save them to `exports/`.
+
+```bash
+python scripts/instagram_cli.py followers --username=zima_magazine --limit=20
+```
+
+The resulting file will be saved as `exports/followers_channelname.csv`.
