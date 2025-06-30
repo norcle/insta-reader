@@ -1,0 +1,13 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+
+# Environments
+.env
+
+# Packages
+*.egg-info/
+
+# Misc
+.DS_Store
