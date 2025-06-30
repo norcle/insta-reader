@@ -26,10 +26,9 @@ If authentication is successful, you will see a confirmation message.
 ### Export followers list
 
 Fetch the followers of a public account and save them to `exports/`.
-You can limit the number of fetched followers (default is 10):
 
 ```bash
-python scripts/instagram_cli.py followers --username=channelname --limit=20
+python scripts/instagram_cli.py followers --username=zima_magazine --limit=20
 ```
 
 The resulting file will be saved as `exports/followers_channelname.csv`.
