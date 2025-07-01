@@ -11,6 +11,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 from instagrapi import Client
 
+from services.airtable_service import upsert_followers
+
 
 SESSION_FILE = Path("session.json")
 
@@ -70,18 +72,28 @@ def cmd_followers(args: argparse.Namespace) -> None:
     export_dir.mkdir(exist_ok=True)
     csv_path = export_dir / f"followers_{target_username}.csv"
 
+    records = []
     with csv_path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(["username", "full_name", "profile_url"])
         for follower in followers.values():
             print(f"{follower.username} - {follower.full_name}")
-            writer.writerow(
-                [
-                    follower.username,
-                    follower.full_name,
-                    f"https://instagram.com/{follower.username}",
-                ]
-            )
+            record = {
+                "username": follower.username,
+                "full_name": follower.full_name,
+                "profile_url": f"https://instagram.com/{follower.username}",
+            }
+            records.append(record)
+            writer.writerow([
+                record["username"],
+                record["full_name"],
+                record["profile_url"],
+            ])
+
+    try:
+        upsert_followers(records)
+    except Exception as exc:
+        print(f"Airtable upload failed: {exc}")
 
     print(f"Exported {len(followers)} followers to {csv_path}")
 
