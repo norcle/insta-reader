@@ -5,11 +5,13 @@ from __future__ import annotations
 
 import argparse
 import csv
+import logging
 import os
 from pathlib import Path
 
 from dotenv import load_dotenv
 from instagrapi import Client
+from delayed_client import DelayedClient
 
 
 SESSION_FILE = Path("session.json")
@@ -25,7 +27,11 @@ def get_authenticated_client() -> Client | None:
         print("Error: INSTAGRAM_LOGIN and INSTAGRAM_PASSWORD must be set in the .env file")
         return None
 
-    client = Client()
+    min_delay = float(os.getenv("IG_DELAY_MIN", "2"))
+    max_delay = float(os.getenv("IG_DELAY_MAX", "7"))
+    jitter = float(os.getenv("IG_DELAY_JITTER", "0.5"))
+
+    client = DelayedClient(min_delay=min_delay, max_delay=max_delay, jitter=jitter)
 
     if SESSION_FILE.exists():
         try:
@@ -109,6 +115,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> None:
+    logging.basicConfig(level=logging.DEBUG)
     parser = build_parser()
     args = parser.parse_args()
     args.func(args)

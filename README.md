@@ -13,6 +13,13 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
+The delay before each request can be tweaked using the following optional
+environment variables in `.env`:
+
+* `IG_DELAY_MIN` - minimum delay in seconds (default `2`)
+* `IG_DELAY_MAX` - maximum delay in seconds (default `7`)
+* `IG_DELAY_JITTER` - random jitter applied to each delay (default `0.5`)
+
 ## Usage
 
 Run the CLI with the `login` command to authenticate:
